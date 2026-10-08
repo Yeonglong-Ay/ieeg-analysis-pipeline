@@ -10,15 +10,16 @@ provided so the pipeline's data interfaces can be run without real data.
 
 
 ## Repository structure
-'''
+
+```
 ieeg-analysis-pipeline/
-├── pipeline/ Core analysis stages (1–14) + shared helper
-├── analysis/ Hypothesis tests, behavioral loss-chasing, dataset summaries
-├── alignment/ Photodiode-based neural–behavioral alignment
-├── plotting/ Alignment visualization
-├── make_demo_data.py Synthetic demo-data generator
-└── demo_data/ Synthetic (fake) data for running the pipeline
-'''
+  pipeline/          Core analysis stages (1-14) + shared helper
+  analysis/          Hypothesis tests, loss-chasing, dataset summaries
+  alignment/         Photodiode-based alignment
+  plotting/          Alignment visualization
+  make_demo_data.py  Synthetic demo-data generator
+  demo_data/         Synthetic (fake) data
+```
 
 ## Pipeline stages (`pipeline/`)
 
