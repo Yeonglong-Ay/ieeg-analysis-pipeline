@@ -8,6 +8,7 @@ loss-chasing behavior.
 data is included. A synthetic demo dataset generator (`make_demo_data.py`) is
 provided so the pipeline's data interfaces can be run without real data.
 
+'''
 ## Repository structure
 
 ieeg-analysis-pipeline/
@@ -17,7 +18,7 @@ ieeg-analysis-pipeline/
 ├── plotting/ Alignment visualization
 ├── make_demo_data.py Synthetic demo-data generator
 └── demo_data/ Synthetic (fake) data for running the pipeline
-
+'''
 
 ## Pipeline stages (`pipeline/`)
 
