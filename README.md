@@ -8,9 +8,9 @@ loss-chasing behavior.
 data is included. A synthetic demo dataset generator (`make_demo_data.py`) is
 provided so the pipeline's data interfaces can be run without real data.
 
-'''
-## Repository structure
 
+## Repository structure
+'''
 ieeg-analysis-pipeline/
 ├── pipeline/ Core analysis stages (1–14) + shared helper
 ├── analysis/ Hypothesis tests, behavioral loss-chasing, dataset summaries
