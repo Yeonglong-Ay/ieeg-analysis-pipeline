@@ -8,14 +8,18 @@ loss-chasing behavior.
 data is included. A synthetic demo dataset generator (`make_demo_data.py`) is
 provided so the pipeline's data interfaces can be run without real data.
 
-## Overview
+## Repository structure
 
-The pipeline takes raw iEEG recordings and task events and produces
-preprocessed neural features, statistical analyses relating neural activity to
-behavior, and connectivity analyses. Built with MNE-Python, NumPy/SciPy,
-pandas, and statsmodels; runs on a high-performance computing cluster (SLURM).
+ieeg-analysis-pipeline/
+├── pipeline/ Core analysis stages (1–14) + shared helper
+├── analysis/ Hypothesis tests, behavioral loss-chasing, dataset summaries
+├── alignment/ Photodiode-based neural–behavioral alignment
+├── plotting/ Alignment visualization
+├── make_demo_data.py Synthetic demo-data generator
+└── demo_data/ Synthetic (fake) data for running the pipeline
 
-## Pipeline stages
+
+## Pipeline stages (`pipeline/`)
 
 - **Stage 1** — Preprocessing: bipolar re-referencing, notch + high-pass
   filtering, epoching, per-channel-per-trial artifact rejection (robust MAD).
@@ -34,8 +38,12 @@ pandas, and statsmodels; runs on a high-performance computing cluster (SLURM).
 - **Stage 14** — Region-to-region spectral connectivity with permutation
   significance, visualized as circular connectivity graphs.
 
-Additional: behavioral loss-chasing analysis, dataset summaries, photodiode
-alignment, and an Aim-1 hypothesis test.
+## Other scripts
+
+- `analysis/` — Aim-1 hypothesis tests, behavioral loss-chasing analysis,
+  dataset-info summaries, self-paced timing.
+- `alignment/` — Photodiode-to-log alignment and pulse counting.
+- `plotting/` — Alignment scatter/diagnostic plots.
 
 ## Methods highlights
 
@@ -57,7 +65,23 @@ alignment, and an Aim-1 hypothesis test.
 python make_demo_data.py
 
 Generates synthetic data (fake electrode, behavioral, and event files) in the
-pipeline's expected format, so the data interfaces can be run without real data.
+pipeline's expected format, under `demo_data/`, so the data interfaces can be
+run without real data.
+
+## Example usage
+
+Run stages from within the `pipeline/` folder (so the shared helper imports
+resolve):
+
+cd pipeline
+python stage1_mne.py --ns3 <recording.ns3>
+--electrodes ../demo_data/electrodes.csv
+--events ../demo_data/events_final_block1.csv ../demo_data/events_final_block2.csv
+--behav ../demo_data/pilot_results_demo_1.csv ../demo_data/pilot_results_demo_2.csv
+--out-dir stage1_out
+
+
+Downstream stages take the previous stage's output directory via `--stage*-dir`.
 
 ## Note
 
