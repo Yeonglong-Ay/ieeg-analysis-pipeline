@@ -1,0 +1,42 @@
+# Data — NEVER commit patient/experimental data
+*.ns3
+*.ns5
+*.nev
+*.ccf
+*.fif
+*.npy
+*.npz
+*.csv
+*.tsv
+stage*_out/
+*_out/
+aim1*_out/
+results/
+data/
+outputs/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.Python
+.ipynb_checkpoints/
+.venv/
+venv/
+
+# System / editor
+.DS_Store
+*.swp
+*~
+.vscode/
+.idea/
+
+# Logs / SLURM
+*.out
+*.err
+*.log
+slurm-*.out
+
+# Allow synthetic demo data (fake, no real patient data)
+!demo_data/
+!demo_data/**
