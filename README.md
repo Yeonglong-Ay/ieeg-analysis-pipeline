@@ -121,7 +121,7 @@ resolve):
 
 ```
 cd pipeline
-python stage1_mne.py --ns3 <recording.ns3> \
+python stage01_mne.py --ns3 <recording.ns3> \
     --electrodes ../demo_data/electrodes.csv \
     --events ../demo_data/events_final_block1.csv ../demo_data/events_final_block2.csv \
     --behav ../demo_data/pilot_results_demo_1.csv ../demo_data/pilot_results_demo_2.csv \

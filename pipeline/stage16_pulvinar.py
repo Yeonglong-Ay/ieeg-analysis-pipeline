@@ -93,7 +93,7 @@ TRUSTED_BAND = 'high_gamma'
 # fine -- these are not. Read beta and above here.
 UNRELIABLE_BANDS = ('delta', 'theta')
 MAX_STREAK = 4
-# palette copied from stage5/9/11 so figures sit alongside the existing ones
+# palette copied from stage05/09/11 so figures sit alongside the existing ones
 C_LOSS = '#C44E52'      # loss / long streak
 C_WIN  = '#4C72B0'      # win / short streak
 C_DIFF = '#1a1a1a'      # difference trace
@@ -171,7 +171,7 @@ def load_ident(stage1_dir, event):
 def load_behavior(behav_csvs):
     """One row per experimental trial, keyed by (block, global_trial).
 
-    Streak decoding copied from stage5_streak_length.py so the two stages
+    Streak decoding copied from stage05_streak_length.py so the two stages
     agree by construction: streak_type is coded 'L3'/'W2'/'none', NOT the
     words loss/win -- the encoding that previously inverted a Stage 5 result.
 
@@ -184,7 +184,7 @@ def load_behavior(behav_csvs):
     every continuing trial, so the script picks per epoch (see STREAK_VAR).
 
     The practice-trial count is DERIVED from the file (phase column), never
-    hardcoded. Note stage5_streak_length.py hardcodes NUM_PRACTICE = 5, which
+    hardcoded. Note stage05_streak_length.py hardcodes NUM_PRACTICE = 5, which
     is wrong for any block without practice trials; some sessions
     have none. See the warning this prints.
     """
@@ -202,7 +202,7 @@ def load_behavior(behav_csvs):
     odd = {b: v for b, v in n_prac.items() if v != 5}
     if odd:
         print(f'  [practice] *** blocks not having 5 practice trials: {odd}. '
-              'stage5_streak_length.py hardcodes NUM_PRACTICE=5 and will '
+              'stage05_streak_length.py hardcodes NUM_PRACTICE=5 and will '
               'misalign those blocks. Check whether stage1 made the same '
               'assumption -- if it did, the EPOCHS are misaligned too. ***')
 

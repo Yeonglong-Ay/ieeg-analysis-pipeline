@@ -3,7 +3,7 @@
 """
 STAGE 2 (MNE version): band power & PETH via Morlet wavelets.
 
-Reads the MNE Epochs from stage1_mne.py, computes time-frequency power with
+Reads the MNE Epochs from stage01_mne.py, computes time-frequency power with
 Morlet wavelets, averages within the six canonical bands, applies a z-score
 baseline, and produces:
   (i)  PETH  = trial-averaged band power (mean+/-SEM) per channel/band/event,
