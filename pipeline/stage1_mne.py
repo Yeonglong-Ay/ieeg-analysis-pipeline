@@ -34,6 +34,8 @@ import numpy as np
 import pandas as pd
 import mne
 from neo.io import BlackrockIO
+from hie_practice import (practice_per_block, exp_trial_to_trial_number,
+                          is_experimental)
 
 EVENTS = {
     'fixation':        (-0.5, 0.5),
@@ -100,7 +102,11 @@ def load_reaction_times(behav_csvs):
     b = b[b['phase'] == 'experimental'].copy()
     b['exp_trial'] = pd.to_numeric(b['experimental_trial'], errors='coerce')
     b = b.dropna(subset=['exp_trial']); b['exp_trial'] = b['exp_trial'].astype(int)
-    b['trial_number'] = b['exp_trial'] + NUM_PRACTICE
+    # per-block practice offset (block 1 may have practice, block 2 may not)
+    npb = practice_per_block(behav_csvs)
+    b['trial_number'] = b.apply(
+        lambda r: exp_trial_to_trial_number(r['exp_trial'], r['block'], npb),
+        axis=1)
     def rt(a, z):
         return (pd.to_numeric(b[z], errors='coerce') -
                 pd.to_numeric(b[a], errors='coerce'))
@@ -112,14 +118,16 @@ def load_reaction_times(behav_csvs):
     return out
 
 
-def load_events(event_csvs):
+def load_events(event_csvs, n_practice_by_block):
     dfs = []
     for i, c in enumerate(event_csvs):
         d = pd.read_csv(c); d['block'] = i + 1
         dfs.append(d)
     ev = pd.concat(dfs, ignore_index=True)
     ev = ev[ev['matched'] == True]
-    ev = ev[ev['trial_number'] > NUM_PRACTICE]      # drop practice
+    # drop practice PER BLOCK (block 1 has practice, block 2 may not)
+    ev = ev[ev.apply(lambda r: is_experimental(r['trial_number'], r['block'],
+                                               n_practice_by_block), axis=1)]
     # keep onset times AND trial identity (block, trial_number) per event, so
     # downstream can trial-match a fixation baseline to the other events.
     onsets, ident = {}, {}
@@ -201,8 +209,15 @@ def main():
     raw_bip.filter(l_freq=args.highpass, h_freq=None, verbose='ERROR')
     report.append(f"Filters: notch 60/120/180 Hz; high-pass {args.highpass} Hz")
 
-    onsets, ident = load_events(args.events)
-    rt_lut = load_reaction_times(args.behav) if args.behav else {}
+    # per-block practice counts (auto-detected from behaviour); needed to drop
+    # practice correctly when blocks differ (some blocks may have no practice trials).
+    if not args.behav:
+        raise SystemExit("--behav is required (used to auto-detect per-block "
+                         "practice counts for correct trial filtering).")
+    npb = practice_per_block(args.behav)
+    print(f"Practice trials per block (auto-detected): {npb}")
+    onsets, ident = load_events(args.events, npb)
+    rt_lut = load_reaction_times(args.behav)
     for ph, win in EVENTS.items():
         report.append(f"Event '{ph}': {len(onsets[ph])} experimental onsets")
 
